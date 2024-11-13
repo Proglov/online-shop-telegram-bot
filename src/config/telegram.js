@@ -1,14 +1,26 @@
 require('dotenv').config();
 const { Telegraf } = require('telegraf');
+const { SocksProxyAgent } = require('socks-proxy-agent');
+
+const { start, help, login } = require('../routes/basicCommands.js');
+
 
 const BOT_TOKEN = process.env.Telegram_Token;
+const agent = new SocksProxyAgent('socks://127.0.0.1:10808');
+const bot = new Telegraf(BOT_TOKEN, {
+    telegram: {
+        agent: agent
+    }
+});
 
-const bot = new Telegraf(BOT_TOKEN);
+bot.start(start);
+bot.help(help);
+bot.command('login', ctx => login(ctx))
 
-// Example command handler
-bot.start((ctx) => ctx.reply('Welcome!'));
-bot.help((ctx) => ctx.reply('Help!'));
-bot.on('text', (ctx) => ctx.reply(`You said: ${ctx.message.text}`));
+bot.on('text', ctx => {
+    // const message = ctx.message.text
+    // console.log(typeof ctx.message.from.id);
+})
 
 
 module.exports = bot;

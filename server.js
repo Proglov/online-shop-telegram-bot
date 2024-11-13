@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+require('colors');
 
 
 const corsOptions = require('./src/config/corsOptions');
@@ -21,9 +22,10 @@ app.listen(PORT, () => {
     // Start the bot
     bot.launch()
         .then(() => {
+            console.error('bot is connected successfully'.green);
         })
         .catch(err => {
-            console.error('Error launching the bot:', err);
+            console.error('Error launching the bot:'.red, err);
         });
     console.log(`server running on port ${PORT}`.blue)
 })
