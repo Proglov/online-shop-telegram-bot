@@ -6,7 +6,10 @@ const { start, help, login } = require('../routes/basicCommands.js');
 
 
 const BOT_TOKEN = process.env.Telegram_Token;
-const agent = new SocksProxyAgent('socks://127.0.0.1:10808');
+const SOCKS_PROXY = process.env.SOCKS_PROXY;
+
+const agent = new SocksProxyAgent(SOCKS_PROXY);
+
 const bot = new Telegraf(BOT_TOKEN, {
     telegram: {
         agent: agent
