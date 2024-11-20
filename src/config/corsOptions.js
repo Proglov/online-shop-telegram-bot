@@ -1,9 +1,10 @@
 require('dotenv').config();
 
+const api = process.env.BackEnd_API
 
-var allowlist = ["https://onlineshopiranian.liara.run", "https://www.cofeman.ir", "https://cofeman.ir"]
+var allowlist = [api]
 
-if (process.env.ENVIRONMENT === 'dev') allowlist.push("http://localhost:3000")
+if (process.env.ENVIRONMENT === 'dev') allowlist.push("http://localhost:4500")
 
 var corsOptions = function (req, callback) {
     var corsOptionsDelegate;

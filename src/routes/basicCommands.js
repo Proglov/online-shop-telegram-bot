@@ -1,3 +1,4 @@
+const { checkStatus } = require("../lib/services");
 
 
 
@@ -13,12 +14,29 @@ const login = ctx => {
     ctx.reply('لطفا کدی که از سایت دریافت کرده اید را وارد کنید')
 }
 
-const status = ctx => {
+const status = async (ctx) => {
+    try {
+        const response = await checkStatus({
+            input: {
+                telegramId: ctx.chat.id,
+                auth: 'IMADMIN'
+            }
+        })
 
+        const json = await response.json()
+
+        if (response?.status !== 200)
+            ctx.reply('شما به هیچ فروشگاهی متصل نیستید')
+
+        else ctx.reply(`شما به فروشگاهِ "${json?.storeName}" متصل هستید`)
+    } catch (error) {
+        ctx.reply('مشکلی رخ داده است')
+    }
 }
 
 module.exports = {
     start,
     help,
-    login
+    login,
+    status
 }

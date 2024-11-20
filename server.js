@@ -6,6 +6,7 @@ require('colors');
 
 const corsOptions = require('./src/config/corsOptions');
 const bot = require('./src/config/telegram');
+const mainRouter = require('./src/routes/sendNotification');
 
 const app = express()
 
@@ -17,6 +18,7 @@ app.use(cors(corsOptions))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use('/notif', mainRouter)
 
 app.listen(PORT, () => {
     // Start the bot
