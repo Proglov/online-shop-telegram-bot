@@ -20,14 +20,35 @@ app.use(express.json());
 
 app.use('/notif', mainRouter)
 
-app.listen(PORT, () => {
+let botConf = {}
+if (process.env.ENVIRONMENT === 'dev') {
+    app.post('/webhook', (req, res) => {
+        bot.handleUpdate(req.body).then(() => {
+            res.sendStatus(200);
+        }).catch(err => {
+            console.error('Error handling update:', err);
+            res.sendStatus(500);
+        });
+    })
+    botConf = {
+        webhook: {
+            domain: process.env.BASE_URL,
+            path: 'webhook',
+            port: PORT
+        }
+    }
+}
+
+app.listen(PORT, async () => {
+
     // Start the bot
-    bot.launch()
+    bot.launch(botConf)
         .then(() => {
             console.error('bot is connected successfully'.green);
         })
         .catch(err => {
             console.error('Error launching the bot:'.red, err);
         });
-    console.log(`server running on port ${PORT}`.blue)
-})
+
+    console.log(`Server running on port ${PORT}`.blue);
+});
