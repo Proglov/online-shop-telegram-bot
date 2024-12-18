@@ -7,11 +7,15 @@ const { getCode, logout } = require('../routes/loging.js');
 
 
 const BOT_TOKEN = process.env.Telegram_Token;
-const SOCKS_PROXY = process.env.SOCKS_PROXY;
+const SOCKS_PROXY = process.env.SOCKS_PROXY || null;
 
-const agent = new SocksProxyAgent(SOCKS_PROXY);
 
-const bot = new Telegraf(BOT_TOKEN, { telegram: { agent: agent } });
+let bot;
+if (process.env.ENVIRONMENT === 'dev') {
+    const agent = new SocksProxyAgent(SOCKS_PROXY);
+    bot = new Telegraf(BOT_TOKEN, { telegram: { agent } });
+}
+else bot = new Telegraf(BOT_TOKEN);
 
 bot.start(start);
 bot.help(help);
